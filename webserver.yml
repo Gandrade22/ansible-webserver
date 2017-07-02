@@ -1,0 +1,81 @@
+---
+- hosts: nome_do_host
+  remote_user: root
+  tasks:
+    - name: "Instalando apache, PHP e MySQL (REDHAT)"
+      yum: name={{ item }} state=present
+      with_items:
+        - httpd
+        - php 
+        - http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
+        - mariadb-server
+        - mysql
+        - php-mysql
+        - php-pear
+        - MySQL-python
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+    - name: "Instalando apache, PHP e MySQL (DEBIAN)"
+      apt: name={{ item }} state=present
+      with_items:
+        - apache2
+        - php
+        - mysql-server
+        - mysql
+        - php-mysql
+        - php-pear
+        - MySQL-python
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+    - name: "Subindo apache (REDHAT)"
+      service: name=httpd state=started enabled=yes
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+    - name: "Subindo apache (DEBIAN)"
+      service: name=apache2 state=started enabled=yes
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+    - name: "Parar mysql (REDHAT)"
+      service: name=mysqld state=stopped
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+    - name: "Parar mysql (DEBIAN)"
+      service: name=mysql state=stopped
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+    - name: "Setar variável de ambiente para limpar atribuir senha (DEBIAN E REDHAT)"
+      shell: systemctl set-environment MYSQLD_OPTS="--skip-grant-tables"
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+    - name: "Iniciar MySQL (REDHAT)"
+      service: name=mysqld state=started
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+    - name: "Iniciar MySQL (DEBIAN)"
+      service: name=mysqld state=started
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+    - name: "Setar senha (DEBIAN e REDHAT)"
+      command:  mysql -u root --execute="UPDATE mysql.user SET authentication_string = PASSWORD('senha') WHERE User = 'root' AND Host = 'localhost';"
+
+    - name: "Setar previlégios (DEBIAN e REDHAT)"
+      command:  mysql -u root --execute="FLUSH PRIVILEGES"
+
+    - name: "Parar mysql (REDHAT)"
+      service: name=mysqld state=stopped
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+    - name: "Parar mysql (DEBIAN)"
+      service: name=mysql state=stopped
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+    - name: "Deletar variável de ambiente (DEBIAN e REDHAT)"
+      shell: systemctl unset-environment MYSQLD_OPTS
+   
+    - name: "Iniciar MySQL (REDHAT)"
+      service: name=mysqld state=started
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+    - name: "Iniciar MySQL (DEBIAN)"
+      service: name=mysqld state=started
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
