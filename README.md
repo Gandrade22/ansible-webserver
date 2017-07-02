@@ -5,6 +5,7 @@ Configuração de apache, php e mysql em distribuições Debian, Ubutnu, CentOS 
 - Adicionar no arquivo /etc/ansible/hosts
 > #Grupo de hosts
 > [grupoA] 
+
 > #ip's exemplo:
 > 192.168.1.1
 > 192.168.1.2
