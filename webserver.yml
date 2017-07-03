@@ -24,7 +24,7 @@
         - mysql
         - php-mysql
         - php-pear
-        - MySQL-python
+        - python-mysqldb
       when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
     - name: "Subindo apache (REDHAT)"
