@@ -24,5 +24,5 @@ Configure apache, php and mysql in distrubutions Debian, Ubutnu, CentOS e RedHat
 * Alter password in mysql root user:
 
 ```
-command:  mysql -u root --execute="UPDATE mysql.user SET authentication_string = PASSWORD('senha') WHERE User = 'root' AND Host = 'localhost';"
+command:  mysql -u root --execute="UPDATE mysql.user SET authentication_string = PASSWORD('pass') WHERE User = 'root' AND Host = 'localhost';"
 ```
