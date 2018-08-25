@@ -1,28 +1,28 @@
 # ansible-webserver
-Configuração de apache, php e mysql em distribuições Debian, Ubutnu, CentOS e RedHat
+Configure apache, php and mysql in distrubutions Debian, Ubutnu, CentOS e RedHat
 
-## Configurações:
+## Confs:
 
-Adicionar no arquivo /etc/ansible/hosts
+* Add in /etc/ansible/hosts:
 
-#Grupo de hosts
-
-[grupoA] 
-
-#ip's exemplo:
-
+```
+[mygroup] 
 192.168.1.1
-
 192.168.1.2
+.
+.
+.
+192.168.1.n
+```
 
-Alterar no arquivo /etc/ansible/palybooks/webserver.yml
+* Alter in file /etc/ansible/palybooks/webserver.yml:
 
-"- hosts: nome_do_host"
+```
+- hosts: mygroup
+```
 
-para
+* Alter password in mysql root user:
 
-"- hosts: grupoA"
-
-Não esqueça de alterar para sua senha
-
+```
 command:  mysql -u root --execute="UPDATE mysql.user SET authentication_string = PASSWORD('senha') WHERE User = 'root' AND Host = 'localhost';"
+```
